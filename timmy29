@@ -1,0 +1,74 @@
+import json
+import requests
+menu = True
+option2=int
+
+#print menu
+while menu:
+    print("Welcome to the AA Calculator")
+    print("Please select one of the following options")
+    print("1. Have a look at the previous entry.")
+    print("2. Make a new entry.")
+    print("3. Close the program")
+    options = int(input("Enter option 1/2/3:"))
+         
+    if options == 1:
+        with open('Log.json') as json_file:
+            data = json.load(json_file)
+            print("")
+            print("Here is the previous entry")
+            print("")
+            print("Your amount of kilometers is " + str(data['KM']) + "KM")
+            print("Your total cost is R" + str(data['Cost']))
+            print("Your Description: " + data['Description'])
+            print("")
+            menu
+    if options == 2:
+        print("How many meters have you traveled")
+        Traveled = int(input("Enter Kilometers here:"))/1000
+        print("1. Hatchback")
+        print("2. SUV")
+        print("3. SportsCar")
+        option2 = int (input("Choose an option from the list 1/2/3:"))
+         
+
+    #insert line 3-5 code from the GA6 file
+        AA_Calc = 'https://raw.githubusercontent.com/tyrone0501/AA-Petrol-Price/main/Cars.json' 
+        response = requests.get(AA_Calc) 
+        response_json = response.json()
+
+        if option2 == 1:
+            print("Hatchback")
+            siteresponse = response_json[ "Hatchback" ]
+            TotalCost = Traveled * siteresponse
+            
+                
+        elif option2 == 2:
+            siteresponse = response_json[ "SUV" ]
+            TotalCost = Traveled * siteresponse
+            print("SUV")
+            
+              
+        elif option2 == 3:
+            siteresponse = response_json[ "SportsCar" ]
+            TotalCost = Traveled * siteresponse
+            print("SportsCar")
+            
+        #print invalid option 
+	
+    #print enter description
+        Description = str(input("Where did you travel and why?:"))
+        mydetails = {
+        'Cost': TotalCost,
+        'KM': Traveled,
+        'Description': Description
+    }
+
+    
+
+        with open('Log.json', 'w') as json_file:
+            json.dump(mydetails, json_file)
+            menu            
+    if options == 3:
+        exit(0)
+
